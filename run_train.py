@@ -121,6 +121,7 @@ class TrainManager(Config):
             **self.shape_info[run_mode]
         )
 
+        print("batch size %d, %d" % (batch_size, self.nr_gpus))
         dataloader = DataLoader(
             input_dataset,
             num_workers=nr_procs,
