@@ -518,7 +518,7 @@ class InferManager(base.InferManager):
         self.wsi_inst_info = {}
         # TODO: option to use entire RAM if users have too much available, would be faster than mmap
         self.wsi_inst_map = np.lib.format.open_memmap(
-            "%s/pred_inst.npy" % self.cache_path,
+            os.path.join(self.cache_path,"pred_inst.npy"),
             mode="w+",
             shape=tuple(self.wsi_proc_shape),
             dtype=np.int32,

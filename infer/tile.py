@@ -251,6 +251,7 @@ class InferManager(base.InferManager):
             cache_image_list = []
             cache_patch_info_list = []
             cache_image_info_list = []
+            file_path_list = [_ for _ in file_path_list if _.endswith(('.tif','.png'))]
             while len(file_path_list) > 0:
                 file_path = file_path_list.pop(0)
 
