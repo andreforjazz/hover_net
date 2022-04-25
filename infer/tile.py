@@ -193,7 +193,12 @@ class InferManager(base.InferManager):
             if self.save_raw_map:
                 mat_dict["raw_map"] = pred_map
             save_path = "%s/mat/%s.mat" % (self.output_dir, img_name)
-            sio.savemat(save_path, mat_dict)
+            try:
+                sio.savemat(save_path, mat_dict)
+            except:
+                print(img_name)
+                print('cannot save mat file for this image')
+
 
             save_path = "%s/overlay/%s.png" % (self.output_dir, img_name)
             cv2.imwrite(save_path, cv2.cvtColor(overlaid_img, cv2.COLOR_RGB2BGR))
@@ -208,7 +213,11 @@ class InferManager(base.InferManager):
                 )
 
             save_path = "%s/json/%s.json" % (self.output_dir, img_name)
-            self.__save_json(save_path, inst_info_dict, None)
+            try:
+                self.__save_json(save_path, inst_info_dict, None)
+            except:
+                print(img_name)
+                print('cannot save json for this')
             return img_name
 
         def detach_items_of_uid(items_list, uid, nr_expected_items):

@@ -4,7 +4,7 @@ from time import time
 src = r"\\babyserverdw5\Digital pathology image lib\L Wood\211120 PDAC fibroblast quantification\raw czi images\HE\20x\tiles"
 cachedir = r"C:\Users\kyuha\Desktop\cache"
 start = time()
-dst = os.path.join(src,'hovernet_out')
+dst = os.path.join(src,'hovernet_out_02')
 # nr_inference_workers 0 if fails
 os.system('python run_infer.py '\
           '--nr_types={} '\

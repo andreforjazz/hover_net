@@ -1,10 +1,12 @@
 import os
 from time import time
 
-src = r"\\10.162.80.17\Kyu\Research\Database\Skin_Aging_Complete_Rescan\wsi"
+src = r"\\fatherserverdw\Q\research\images\CLUE\3D study\he\c2"
 cachedir = r"C:\Users\kyuha\Desktop\cache"
 start = time()
 dst = os.path.join(src,'hovernet_out')
+if not os.path.exists(dst): os.mkdir(dst)
+
 # nr_inference_workers 0 if fails
 os.system('python run_infer.py '\
           '--nr_types={} '\

@@ -17,6 +17,7 @@ import sys
 import time
 from functools import reduce
 from importlib import import_module
+from natsort import natsorted
 
 import cv2
 import numpy as np
@@ -517,21 +518,39 @@ class InferManager(base.InferManager):
         out_ch = 3 if self.method["model_args"]["nr_types"] is None else 4
         self.wsi_inst_info = {}
         # TODO: option to use entire RAM if users have too much available, would be faster than mmap
-        self.wsi_inst_map = np.lib.format.open_memmap(
-            os.path.join(self.cache_path,"pred_inst.npy"),
-            mode="w+",
-            shape=tuple(self.wsi_proc_shape),
-            dtype=np.int32,
-        )
+        try:
+            self.wsi_inst_map = np.lib.format.open_memmap(
+                os.path.join("%s" % self.cache_path, "pred_inst.npy"),
+                mode="w+",
+                shape=tuple(self.wsi_proc_shape),
+                dtype=np.int32,
+            )
+        except:
+            self.wsi_inst_map._mmap.close()
+            self.wsi_inst_map = np.lib.format.open_memmap(
+                os.path.join("%s" % self.cache_path, "pred_inst.npy"),
+                mode="w+",
+                shape=tuple(self.wsi_proc_shape),
+                dtype=np.int32,
+            )
         # self.wsi_inst_map[:] = 0 # flush fill
 
         # warning, the value within this is uninitialized
-        self.wsi_pred_map = np.lib.format.open_memmap(
-            "%s/pred_map.npy" % self.cache_path,
-            mode="w+",
-            shape=tuple(self.wsi_proc_shape) + (out_ch,),
-            dtype=np.float32,
-        )
+        try:
+            self.wsi_pred_map = np.lib.format.open_memmap(
+                "%s/pred_map.npy" % self.cache_path,
+                mode="w+",
+                shape=tuple(self.wsi_proc_shape) + (out_ch,),
+                dtype=np.float32,
+            )
+        except:
+            self.wsi_pred_map._mmap.close()
+            self.wsi_pred_map = np.lib.format.open_memmap(
+                "%s/pred_map.npy" % self.cache_path,
+                mode="w+",
+                shape=tuple(self.wsi_proc_shape) + (out_ch,),
+                dtype=np.float32,
+            )
         # ! for debug
         # self.wsi_pred_map = np.load('%s/pred_map.npy' % self.cache_path, mmap_mode='r')
         end = time.perf_counter()
@@ -729,8 +748,8 @@ class InferManager(base.InferManager):
             if not os.path.exists(self.output_dir + "/mask/"):
                 rm_n_mkdir(self.output_dir + "/mask/")
 
-        wsi_path_list = glob.glob(self.input_dir + "/*")
-        wsi_path_list.sort()  # ensure ordering
+        wsi_path_list = glob.glob(self.input_dir + "/*svs") + glob.glob(self.input_dir + "/*ndpi")
+        wsi_path_list = natsorted(wsi_path_list)# ensure ordering
         for wsi_path in wsi_path_list[:]:
             wsi_base_name = pathlib.Path(wsi_path).stem
             msk_path = "%s/%s.png" % (self.input_mask_dir, wsi_base_name)
@@ -747,5 +766,12 @@ class InferManager(base.InferManager):
                 log_info("Finish")
             except:
                 logging.exception("Crash")
-        rm_n_mkdir(self.cache_path)  # clean up all cache
+
+        try:
+            self.wsi_inst_map._mmap.close()
+            self.wsi_pred_map._mmap.close()
+            rm_n_mkdir(self.cache_path)  # clean up all cache
+        except:
+            print('error here')
+            rm_n_mkdir(self.cache_path)  # clean up all cache
         return
