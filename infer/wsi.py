@@ -18,6 +18,7 @@ import time
 from functools import reduce
 from importlib import import_module
 from natsort import natsorted
+import pandas as pd
 
 import cv2
 import numpy as np
@@ -477,8 +478,8 @@ class InferManager(base.InferManager):
 
         if msk_path is not None and os.path.isfile(msk_path):
             self.wsi_mask = cv2.imread(msk_path)
-            self.wsi_mask = cv2.cvtColor(self.wsi_mask, cv2.COLOR_BGR2GRAY)
-            self.wsi_mask[self.wsi_mask > 0] = 1
+            # self.wsi_mask = cv2.cvtColor(self.wsi_mask, cv2.COLOR_BGR2GRAY)
+            # self.wsi_mask[self.wsi_mask > 0] = 1
         else:
             log_info(
                 "WARNING: No mask found, generating mask via thresholding at 1.25x!"
@@ -748,8 +749,16 @@ class InferManager(base.InferManager):
             if not os.path.exists(self.output_dir + "/mask/"):
                 rm_n_mkdir(self.output_dir + "/mask/")
 
-        wsi_path_list = glob.glob(self.input_dir + "/*svs") + glob.glob(self.input_dir + "/*ndpi")
-        wsi_path_list = natsorted(wsi_path_list)# ensure ordering
+        # wsi_path_list = glob.glob(self.input_dir + "/*svs") + glob.glob(self.input_dir + "/*ndpi")
+        # wsi_path_list = natsorted(wsi_path_list)# ensure ordering
+        wsi_path_list1 = pd.read_excel(r"\\fatherserverdw\kyuex\imlist_all.xlsx", engine='openpyxl')
+        # wsi_path_list2 = wsi_path_list1[
+        #     (wsi_path_list1['body part 1'] == "BACK") & (wsi_path_list1['student score'] > 1)]
+        wsi_path_list2 = wsi_path_list1[(wsi_path_list1['student score'] > 1)]
+        wsi_path_list3 = wsi_path_list2.set_index('index')
+        wsi_path_list4 = wsi_path_list3.sort_index()
+        wsi_path_list = [os.path.join(self.input_dir, _) for _ in wsi_path_list4['filename'].tolist()]
+
         for wsi_path in wsi_path_list[:]:
             wsi_base_name = pathlib.Path(wsi_path).stem
             msk_path = "%s/%s.png" % (self.input_mask_dir, wsi_base_name)

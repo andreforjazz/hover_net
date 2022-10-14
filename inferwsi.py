@@ -1,10 +1,11 @@
 import os
 from time import time
 
-src = r"\\fatherserverdw\Q\research\images\CLUE\3D study\he\c2"
+src = r"\\fatherserverdw\kyuex\clue images"
 cachedir = r"C:\Users\kyuha\Desktop\cache"
 start = time()
 dst = os.path.join(src,'hovernet_out')
+maskdir = r'\\fatherserverdw\kyuex\clue images\annotations\roi\labeledmask_20rsf'
 if not os.path.exists(dst): os.mkdir(dst)
 
 # nr_inference_workers 0 if fails
@@ -20,13 +21,14 @@ os.system('python run_infer.py '\
           '--output_dir="{}" '\
           '--proc_mag={} '\
           '--cache_path={} '\
-          '--save_thumb --save_mask'\
+          '--mask_dir={} '\
           .format(0,16,8,11,'original',
                   "./models/pretrained/hovernet_original_consep_notype_tf2pytorch.tar",
                   src,
                   dst,
                   20,
                   cachedir,
+                  maskdir
                   )
           )
 end = time()
