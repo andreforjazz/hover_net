@@ -19,6 +19,7 @@ from functools import reduce
 from importlib import import_module
 from natsort import natsorted
 import pandas as pd
+from PIL import Image
 
 import cv2
 import numpy as np
@@ -477,9 +478,10 @@ class InferManager(base.InferManager):
         self.wsi_proc_shape = np.array(self.wsi_proc_shape[::-1])  # to Y, X
 
         if msk_path is not None and os.path.isfile(msk_path):
-            self.wsi_mask = cv2.imread(msk_path)
+            self.wsi_mask = np.array(Image.open(msk_path))
+            # self.wsi_mask = cv2.imread(msk_path)
             # self.wsi_mask = cv2.cvtColor(self.wsi_mask, cv2.COLOR_BGR2GRAY)
-            # self.wsi_mask[self.wsi_mask > 0] = 1
+            self.wsi_mask[self.wsi_mask > 0] = 1
         else:
             log_info(
                 "WARNING: No mask found, generating mask via thresholding at 1.25x!"
@@ -761,7 +763,8 @@ class InferManager(base.InferManager):
 
         for wsi_path in wsi_path_list[:]:
             wsi_base_name = pathlib.Path(wsi_path).stem
-            msk_path = "%s/%s.png" % (self.input_mask_dir, wsi_base_name)
+            msk_path = os.path.join(self.input_mask_dir, wsi_base_name+'.png')
+            print(msk_path)
             if self.save_thumb or self.save_mask:
                 output_file = "%s/json/%s.json" % (self.output_dir, wsi_base_name)
             else:

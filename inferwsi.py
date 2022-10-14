@@ -2,7 +2,7 @@ import os
 from time import time
 
 src = r"\\fatherserverdw\kyuex\clue images"
-cachedir = r"C:\Users\kyuha\Desktop\cache"
+cachedir = r"C:\Users\pwu\Desktop\cache"
 start = time()
 dst = os.path.join(src,'hovernet_out')
 maskdir = r'\\fatherserverdw\kyuex\clue images\annotations\roi\labeledmask_20rsf'
