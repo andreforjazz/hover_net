@@ -20,15 +20,15 @@ os.system('python run_infer.py '\
           '--input_dir="{}" '\
           '--output_dir="{}" '\
           '--proc_mag={} '\
-          '--cache_path={} '\
-          '--mask_dir={} '\
+          '--input_mask_dir="{}" '\
+          '--cache_path="{}" '\
           .format(0,16,8,11,'original',
                   "./models/pretrained/hovernet_original_consep_notype_tf2pytorch.tar",
                   src,
                   dst,
                   20,
-                  cachedir,
-                  maskdir
+                  maskdir,
+                  cachedir
                   )
           )
 end = time()
