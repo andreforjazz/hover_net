@@ -1,8 +1,8 @@
 import os
 from time import time
 
-src = r"\\10.162.80.17\Kyu\Research\Database\Skin_Aging_Complete_Rescan\wsi"
-cachedir = r"C:\Users\kyuha\Desktop\cache"
+src = r"\\shelter\Kyu\skin_aging\clue_cohort\wsi"
+cachedir = r"C:\Users\Kevin\Desktop\cache"
 start = time()
 dst = os.path.join(src,'hovernet_out')
 # nr_inference_workers 0 if fails
@@ -23,7 +23,7 @@ os.system('python run_infer.py '\
                   "./models/pretrained/hovernet_original_consep_notype_tf2pytorch.tar",
                   src,
                   dst,
-                  20,
+                  40,
                   cachedir,
                   )
           )

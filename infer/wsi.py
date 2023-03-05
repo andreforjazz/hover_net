@@ -753,9 +753,8 @@ class InferManager(base.InferManager):
 
         # wsi_path_list = glob.glob(self.input_dir + "/*svs") + glob.glob(self.input_dir + "/*ndpi")
         # wsi_path_list = natsorted(wsi_path_list)# ensure ordering
-        wsi_path_list1 = pd.read_excel(r"\\fatherserverdw\kyuex\imlist_all.xlsx", engine='openpyxl')
-        # wsi_path_list2 = wsi_path_list1[
-        #     (wsi_path_list1['body part 1'] == "BACK") & (wsi_path_list1['student score'] > 1)]
+
+        wsi_path_list1 = pd.read_excel(r"\\shelter\Kyu\skin_aging\clue_cohort\CLUE_image_list_230207_v2.xlsx", engine='openpyxl')
         wsi_path_list2 = wsi_path_list1[(wsi_path_list1['student score'] > 1)]
         wsi_path_list3 = wsi_path_list2.set_index('index')
         wsi_path_list4 = wsi_path_list3.sort_index()
@@ -763,8 +762,9 @@ class InferManager(base.InferManager):
 
         for wsi_path in wsi_path_list[:]:
             wsi_base_name = pathlib.Path(wsi_path).stem
-            msk_path = os.path.join(self.input_mask_dir, wsi_base_name+'.png')
-            print(msk_path)
+            msk_path = None
+            # msk_path = os.path.join(self.input_mask_dir, wsi_base_name+'.png')
+            # print(msk_path)
             if self.save_thumb or self.save_mask:
                 output_file = "%s/json/%s.json" % (self.output_dir, wsi_base_name)
             else:
