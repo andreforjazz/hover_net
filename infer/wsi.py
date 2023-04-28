@@ -751,15 +751,17 @@ class InferManager(base.InferManager):
             if not os.path.exists(self.output_dir + "/mask/"):
                 rm_n_mkdir(self.output_dir + "/mask/")
 
-        # wsi_path_list = glob.glob(self.input_dir + "/*svs") + glob.glob(self.input_dir + "/*ndpi")
-        # wsi_path_list = natsorted(wsi_path_list)# ensure ordering
+        wsi_path_list = glob.glob(self.input_dir + "/*svs") + glob.glob(self.input_dir + "/*ndpi")
+        wsi_path_list = natsorted(wsi_path_list)# ensure ordering
         #TO-DO: take list of wsi as input. now it's handled inside of the package
-        wsi_path_list1 = pd.read_excel(r"\\shelter\Kyu\skin_aging\clue_cohort\CLUE_image_list_230207_v2.xlsx", engine='openpyxl')
-        wsi_path_list2 = wsi_path_list1[(wsi_path_list1['student score'] > 1)]
-        wsi_path_list4 = natsorted(wsi_path_list2)
+        # wsi_path_list1 = pd.read_excel(r"\\shelter\Kyu\skin_aging\clue_cohort\CLUE_image_list_230207_v2.xlsx", engine='openpyxl')
+        # wsi_path_list2 = wsi_path_list1[(wsi_path_list1['student score'] > 1)]
+        # wsi_path_list3 = wsi_path_list2["filename"]
+        # wsi_path_list4 = natsorted(wsi_path_list3)
         # wsi_path_list3 = wsi_path_list2.set_index('index')
         # wsi_path_list4 = wsi_path_list3.sort_index()
-        wsi_path_list = [os.path.join(self.input_dir, _) for _ in wsi_path_list4['filename'].tolist()]
+        # wsi_path_list = [os.path.join(self.input_dir, _) for _ in wsi_path_list4][::-1]
+        print(len(wsi_path_list))
 
         for wsi_path in wsi_path_list[:]:
             wsi_base_name = pathlib.Path(wsi_path).stem
@@ -770,7 +772,13 @@ class InferManager(base.InferManager):
                 output_file = "%s/json/%s.json" % (self.output_dir, wsi_base_name)
             else:
                 output_file = "%s/%s.json" % (self.output_dir, wsi_base_name)
-            if os.path.exists(output_file):
+            # edited by kevin
+            if self.save_thumb or self.save_mask:
+                output_file1 = "%s/mask/%s.png" % (self.output_dir, wsi_base_name)
+            else:
+                output_file1 = "%s/%s.png" % (self.output_dir, wsi_base_name)
+
+            if os.path.exists(output_file) or os.path.exists(output_file1):
                 log_info("Skip: %s" % wsi_base_name)
                 continue
             try:
