@@ -1,8 +1,8 @@
 import os
 from time import time
 
-src = r"\\fatherserverdw\andreex\students\Eduarda PDAC tissue composition\3D_annotations\TC_039"
-cachedir = r"C:\Users\labadmin\Desktop\cache"
+src = r"\\10.162.80.16\Andre\data\monkey fetus\gestational 40"
+cachedir = r"C:\Users\Andre\Desktop\cache"
 start = time()
 dst = os.path.join(src,'hovernet_out')
 # nr_inference_workers 0 if fails
