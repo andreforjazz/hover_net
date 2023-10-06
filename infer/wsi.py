@@ -753,14 +753,7 @@ class InferManager(base.InferManager):
 
         wsi_path_list = glob.glob(self.input_dir + "/*svs") + glob.glob(self.input_dir + "/*ndpi")
         wsi_path_list = natsorted(wsi_path_list)# ensure ordering
-        #TO-DO: take list of wsi as input. now it's handled inside of the package
-        # wsi_path_list1 = pd.read_excel(r"\\shelter\Kyu\skin_aging\clue_cohort\CLUE_image_list_230207_v2.xlsx", engine='openpyxl')
-        # wsi_path_list2 = wsi_path_list1[(wsi_path_list1['student score'] > 1)]
-        # wsi_path_list3 = wsi_path_list2["filename"]
-        # wsi_path_list4 = natsorted(wsi_path_list3)
-        # wsi_path_list3 = wsi_path_list2.set_index('index')
-        # wsi_path_list4 = wsi_path_list3.sort_index()
-        # wsi_path_list = [os.path.join(self.input_dir, _) for _ in wsi_path_list4][::-1]
+        wsi_path_list = wsi_path_list[100:200]
         print(len(wsi_path_list))
 
         for wsi_path in wsi_path_list[:]:
