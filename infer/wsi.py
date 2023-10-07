@@ -753,32 +753,24 @@ class InferManager(base.InferManager):
 
         wsi_path_list = glob.glob(self.input_dir + "/*svs") + glob.glob(self.input_dir + "/*ndpi")
         wsi_path_list = natsorted(wsi_path_list)# ensure ordering
-        wsi_path_list = wsi_path_list[100:200]
+        wsi_path_list = wsi_path_list[200:300]
         print(len(wsi_path_list))
 
         for wsi_path in wsi_path_list[:]:
             wsi_base_name = pathlib.Path(wsi_path).stem
-            msk_path = None
-            # msk_path = os.path.join(self.input_mask_dir, wsi_base_name+'.png')
-            # print(msk_path)
+            msk_path = "%s/%s.png" % (self.input_mask_dir, wsi_base_name)
             if self.save_thumb or self.save_mask:
                 output_file = "%s/json/%s.json" % (self.output_dir, wsi_base_name)
             else:
                 output_file = "%s/%s.json" % (self.output_dir, wsi_base_name)
-            # edited by kevin
-            if self.save_thumb or self.save_mask:
-                output_file1 = "%s/mask/%s.png" % (self.output_dir, wsi_base_name)
-            else:
-                output_file1 = "%s/%s.png" % (self.output_dir, wsi_base_name)
-
-            if os.path.exists(output_file) or os.path.exists(output_file1):
+            if os.path.exists(output_file):
                 log_info("Skip: %s" % wsi_base_name)
                 continue
             try:
                 log_info("Process: %s" % wsi_base_name)
                 self.process_single_file(wsi_path, msk_path, self.output_dir)
                 log_info("Finish")
-            except:
+            except Exception:
                 logging.exception("Crash")
 
         try:

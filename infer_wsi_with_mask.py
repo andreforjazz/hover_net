@@ -1,11 +1,11 @@
 import os
 from time import time
 
-src = r"\\fatherserverdw\kyuex\clue images"
-cachedir = r"C:\Users\pwu\Desktop\cache"
+src = r"\\10.162.80.16\Andre\data\monkey fetus\gestational 40"
+cachedir = r"C:\Users\Andre\Desktop\cache"
 start = time()
 dst = os.path.join(src,'hovernet_out')
-maskdir = r'\\fatherserverdw\kyuex\clue images\annotations\roi\labeledmask_20rsf'
+maskdir = r'\\10.162.80.16\Andre\data\monkey fetus\gestational 40\20x_mask'
 if not os.path.exists(dst): os.mkdir(dst)
 
 # nr_inference_workers 0 if fails
